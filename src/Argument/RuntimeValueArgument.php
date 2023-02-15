@@ -14,14 +14,15 @@
 
 namespace Fuel\Container\Argument;
 
+use Fuel\Container\Exception\NotFoundException;
 /**
  * @since 2.0
  */
-class DefaultValueArgument extends ResolvableArgument implements DefaultValueInterface
+class RuntimeValueArgument implements RuntimeValueInterface
 {
-    /**
-     */
-    protected $defaultValue;
+    protected $name;
+
+    protected $values = [];
 
     /**
      * -----------------------------------------------------------------------------
@@ -30,10 +31,14 @@ class DefaultValueArgument extends ResolvableArgument implements DefaultValueInt
      *
      * @since 2.0.0
      */
-    public function __construct(string $value, $defaultValue = null)
+    public function __construct(string $name, mixed $default = null)
     {
-        $this->defaultValue = $defaultValue;
-        parent::__construct($value);
+        $this->name = $name;
+
+        if (func_num_args() > 1)
+        {
+            $this->values['default'] = $default;
+        }
     }
 
     /**
@@ -43,8 +48,25 @@ class DefaultValueArgument extends ResolvableArgument implements DefaultValueInt
      *
      * @since 2.0.0
      */
-    public function getDefaultValue(): mixed
+    public function getName(): string
     {
-        return $this->defaultValue;
+        return $this->name;
+    }
+
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
+    public function getDefault(): mixed
+    {
+        if (array_key_exists('default', $this->values))
+        {
+            return $this->values['default'];
+        }
+
+        throw new NotFoundException(sprintf('No runtime value exists for "%s".', $this->name));
     }
 }

@@ -12,14 +12,20 @@
  * @link       https://fuelphp.org
  */
 
-namespace Fuel\Container\Argument\Literal;
+namespace Fuel\Container\Argument;
 
-use Fuel\Container\Argument\LiteralArgument;
-
-class BooleanArgument extends LiteralArgument
+/**
+ * @since 2.0
+ */
+interface RuntimeValueInterface
 {
-    public function __construct(bool $value)
-    {
-        parent::__construct($value, LiteralArgument::TYPE_BOOL);
-    }
+    /**
+     * @return void
+     */
+    public function getName(): string;
+
+    /**
+     * @return mixed
+     */
+    public function getDefault(): mixed;
 }

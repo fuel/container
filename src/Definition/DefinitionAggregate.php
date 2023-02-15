@@ -1,13 +1,26 @@
-<?php
+<?php declare(strict_types=1);
 
-declare(strict_types=1);
+/**
+ * The Fuel PHP Framework is a fast, simple and flexible development framework
+ *
+ * @package    fuel
+ * @version    2.0.0
+ * @author     FlexCoders Ltd, Fuel The PHP Framework Team
+ * @license    MIT License
+ * @copyright  2023 FlexCoders Ltd, The Fuel PHP Framework Team
+ * @copyright  2021 Phil Bennett <philipobenito@gmail.com>
+ * @link       https://fuelphp.org
+ */
 
-namespace League\Container\Definition;
+namespace Fuel\Container\Definition;
 
 use Generator;
-use League\Container\ContainerAwareTrait;
-use League\Container\Exception\NotFoundException;
+use Fuel\Container\ContainerAwareTrait;
+use Fuel\Container\Exception\NotFoundException;
 
+/**
+ * @since 2.0
+ */
 class DefinitionAggregate implements DefinitionAggregateInterface
 {
     use ContainerAwareTrait;
@@ -17,6 +30,13 @@ class DefinitionAggregate implements DefinitionAggregateInterface
      */
     protected $definitions = [];
 
+    /**
+     * -----------------------------------------------------------------------------
+     * Class constructor
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function __construct(array $definitions = [])
     {
         $this->definitions = array_filter($definitions, static function ($definition) {
@@ -24,27 +44,49 @@ class DefinitionAggregate implements DefinitionAggregateInterface
         });
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function add(string $id, $definition): DefinitionInterface
     {
-        if (false === ($definition instanceof DefinitionInterface)) {
-            $definition = new Definition($id, $definition);
-        }
+        $definition = new Definition($id, $definition);
 
         $this->definitions[] = $definition->setAlias($id);
 
         return $definition;
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function addShared(string $id, $definition): DefinitionInterface
     {
         $definition = $this->add($id, $definition);
+
         return $definition->setShared(true);
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function has(string $id): bool
     {
-        foreach ($this->getIterator() as $definition) {
-            if ($id === $definition->getAlias()) {
+        foreach ($this->getIterator() as $definition)
+        {
+            if ($id === $definition->getAlias())
+            {
                 return true;
             }
         }
@@ -52,10 +94,19 @@ class DefinitionAggregate implements DefinitionAggregateInterface
         return false;
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function hasTag(string $tag): bool
     {
-        foreach ($this->getIterator() as $definition) {
-            if ($definition->hasTag($tag)) {
+        foreach ($this->getIterator() as $definition)
+        {
+            if ($definition->hasTag($tag))
+            {
                 return true;
             }
         }
@@ -63,10 +114,19 @@ class DefinitionAggregate implements DefinitionAggregateInterface
         return false;
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function getDefinition(string $id): DefinitionInterface
     {
-        foreach ($this->getIterator() as $definition) {
-            if ($id === $definition->getAlias()) {
+        foreach ($this->getIterator() as $definition)
+        {
+            if ($id === $definition->getAlias())
+            {
                 return $definition->setContainer($this->getContainer());
             }
         }
@@ -74,22 +134,45 @@ class DefinitionAggregate implements DefinitionAggregateInterface
         throw new NotFoundException(sprintf('Alias (%s) is not being handled as a definition.', $id));
     }
 
-    public function resolve(string $id)
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
+    public function resolve(string $id, array $params = [])
     {
-        return $this->getDefinition($id)->resolve();
+        return $this->getDefinition($id)->resolve($params);
     }
 
-    public function resolveNew(string $id)
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
+    public function resolveNew(string $id, array $params = [])
     {
-        return $this->getDefinition($id)->resolveNew();
+        return $this->getDefinition($id)->resolveNew($params);
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function resolveTagged(string $tag): array
     {
         $arrayOf = [];
 
-        foreach ($this->getIterator() as $definition) {
-            if ($definition->hasTag($tag)) {
+        foreach ($this->getIterator() as $definition)
+        {
+            if ($definition->hasTag($tag))
+            {
                 $arrayOf[] = $definition->setContainer($this->getContainer())->resolve();
             }
         }
@@ -97,12 +180,21 @@ class DefinitionAggregate implements DefinitionAggregateInterface
         return $arrayOf;
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function resolveTaggedNew(string $tag): array
     {
         $arrayOf = [];
 
-        foreach ($this->getIterator() as $definition) {
-            if ($definition->hasTag($tag)) {
+        foreach ($this->getIterator() as $definition)
+        {
+            if ($definition->hasTag($tag))
+            {
                 $arrayOf[] = $definition->setContainer($this->getContainer())->resolveNew();
             }
         }
@@ -110,6 +202,13 @@ class DefinitionAggregate implements DefinitionAggregateInterface
         return $arrayOf;
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function getIterator(): Generator
     {
         yield from $this->definitions;

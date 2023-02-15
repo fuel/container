@@ -1,8 +1,10 @@
 {
-    "name": "league/container",
+    "name": "fuel/container",
+    "type": "library",
     "description": "A fast and intuitive dependency injection container.",
     "keywords": [
-        "league",
+        "fuel",
+        "fuelphp",
         "container",
         "dependency",
         "injection",
@@ -10,17 +12,27 @@
         "service",
         "provider"
     ],
-    "homepage": "https://github.com/thephpleague/container",
+    "homepage": "https://github.com/fuel/container",
     "license": "MIT",
     "authors": [
         {
             "name": "Phil Bennett",
             "email": "mail@philbennett.co.uk",
+            "role": "Original developer"
+        },
+        {
+            "name": "Fuel PHP team",
+            "email": "contact@fuelphp.org",
             "role": "Developer"
         }
     ],
+    "support": {
+        "issues": "https://github.com/fuel/container/issues",
+        "source": "https://github.com/fuel/container",
+        "docs": "https://fuelphp.org/docs/container"
+    },
     "require": {
-        "php": "^7.2 || ^8.0",
+        "php": "^8.2",
         "psr/container": "^1.1 || ^2.0"
     },
     "require-dev": {
@@ -35,30 +47,20 @@
     "provide": {
         "psr/container-implementation": "^1.0"
     },
-    "replace": {
-        "orno/di": "~2.0"
-    },
     "autoload": {
         "psr-4": {
-            "League\\Container\\": "src"
+            "Fuel\\Container\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "League\\Container\\Test\\": "tests"
+            "Fuel\\Container\\Tests\\": "tests"
         },
         "files": [
             "tests/Asset/function.php"
-        ]        
+        ]
     },
     "extra": {
-        "branch-alias": {
-            "dev-master": "4.x-dev",
-            "dev-4.x": "4.x-dev",
-            "dev-3.x": "3.x-dev",
-            "dev-2.x": "2.x-dev",
-            "dev-1.x": "1.x-dev"
-        }
     },
     "scripts": {
         "test": [

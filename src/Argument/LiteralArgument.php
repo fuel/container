@@ -1,11 +1,24 @@
-<?php
+<?php declare(strict_types=1);
 
-declare(strict_types=1);
+/**
+ * The Fuel PHP Framework is a fast, simple and flexible development framework
+ *
+ * @package    fuel
+ * @version    2.0.0
+ * @author     FlexCoders Ltd, Fuel The PHP Framework Team
+ * @license    MIT License
+ * @copyright  2021 Phil Bennett <philipobenito@gmail.com>
+ * @copyright  2023 FlexCoders Ltd, The Fuel PHP Framework Team
+ * @link       https://fuelphp.org
+ */
 
-namespace League\Container\Argument;
+namespace Fuel\Container\Argument;
 
 use InvalidArgumentException;
 
+/**
+ * @since 2.0
+ */
 class LiteralArgument implements LiteralArgumentInterface
 {
     public const TYPE_ARRAY    = 'array';
@@ -24,6 +37,13 @@ class LiteralArgument implements LiteralArgumentInterface
      */
     protected $value;
 
+    /**
+     * -----------------------------------------------------------------------------
+     * Class constructor
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function __construct($value, string $type = null)
     {
         if (
@@ -39,9 +59,13 @@ class LiteralArgument implements LiteralArgumentInterface
     }
 
     /**
-     * {@inheritdoc}
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
      */
-    public function getValue()
+    public function getValue(): mixed
     {
         return $this->value;
     }

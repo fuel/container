@@ -1,6 +1,10 @@
 # The MIT License (MIT)
 
-Copyright (c) 2021 Phil Bennett <philipobenito@gmail.com>
+The original code is Copyright (c) 2021 Phil Bennett <philipobenito@gmail.com>
+See https://container.thephpleague.com and https://github.com/thephpleague/container
+for the original code and documentation.
+
+Copyright (c) 2023 The Fuel PHP Framework team <contact@fuelphp.org>
 
 > Permission is hereby granted, free of charge, to any person obtaining a copy
 > of this software and associated documentation files (the "Software"), to deal

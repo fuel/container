@@ -1,12 +1,25 @@
-<?php
+<?php declare(strict_types=1);
 
-declare(strict_types=1);
+/**
+ * The Fuel PHP Framework is a fast, simple and flexible development framework
+ *
+ * @package    fuel
+ * @version    2.0.0
+ * @author     FlexCoders Ltd, Fuel The PHP Framework Team
+ * @license    MIT License
+ * @copyright  2021 Phil Bennett <philipobenito@gmail.com>
+ * @copyright  2023 FlexCoders Ltd, The Fuel PHP Framework Team
+ * @link       https://fuelphp.org
+ */
 
-namespace League\Container;
+namespace Fuel\Container;
 
 use BadMethodCallException;
-use League\Container\Exception\ContainerException;
+use Fuel\Container\Exception\ContainerException;
 
+/**
+ * @since 2.0
+ */
 trait ContainerAwareTrait
 {
     /**
@@ -14,11 +27,19 @@ trait ContainerAwareTrait
      */
     protected $container;
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function setContainer(DefinitionContainerInterface $container): ContainerAwareInterface
     {
         $this->container = $container;
 
-        if ($this instanceof ContainerAwareInterface) {
+        if ($this instanceof ContainerAwareInterface)
+        {
             return $this;
         }
 
@@ -29,9 +50,17 @@ trait ContainerAwareTrait
         ));
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function getContainer(): DefinitionContainerInterface
     {
-        if ($this->container instanceof DefinitionContainerInterface) {
+        if ($this->container instanceof DefinitionContainerInterface)
+        {
             return $this->container;
         }
 

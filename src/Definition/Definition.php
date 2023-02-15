@@ -1,20 +1,33 @@
-<?php
+<?php declare(strict_types=1);
 
-declare(strict_types=1);
+/**
+ * The Fuel PHP Framework is a fast, simple and flexible development framework
+ *
+ * @package    fuel
+ * @version    2.0.0
+ * @author     FlexCoders Ltd, Fuel The PHP Framework Team
+ * @license    MIT License
+ * @copyright  2021 Phil Bennett <philipobenito@gmail.com>
+ * @copyright  2023 FlexCoders Ltd, The Fuel PHP Framework Team
+ * @link       https://fuelphp.org
+ */
 
-namespace League\Container\Definition;
+namespace Fuel\Container\Definition;
 
-use League\Container\Argument\{
+use Fuel\Container\Argument\{
     ArgumentResolverInterface,
     ArgumentResolverTrait,
     ArgumentInterface,
     LiteralArgumentInterface
 };
-use League\Container\ContainerAwareTrait;
-use League\Container\Exception\ContainerException;
+use Fuel\Container\ContainerAwareTrait;
+use Fuel\Container\Exception\ContainerException;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 
+/**
+ * @since 2.0
+ */
 class Definition implements ArgumentResolverInterface, DefinitionInterface
 {
     use ArgumentResolverTrait;
@@ -56,8 +69,14 @@ class Definition implements ArgumentResolverInterface, DefinitionInterface
     protected $resolved;
 
     /**
+     * -----------------------------------------------------------------------------
+     * Class constructor
+     * -----------------------------------------------------------------------------
+     *
      * @param string     $id
      * @param mixed|null $concrete
+     *
+     * @since 2.0.0
      */
     public function __construct(string $id, $concrete = null)
     {
@@ -66,66 +85,149 @@ class Definition implements ArgumentResolverInterface, DefinitionInterface
         $this->concrete = $concrete;
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function addTag(string $tag): DefinitionInterface
     {
         $this->tags[$tag] = true;
+
         return $this;
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function hasTag(string $tag): bool
     {
         return isset($this->tags[$tag]);
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function setAlias(string $id): DefinitionInterface
     {
         $this->alias = $id;
+
         return $this;
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function getAlias(): string
     {
         return $this->alias;
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function setShared(bool $shared = true): DefinitionInterface
     {
         $this->shared = $shared;
+
         return $this;
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function isShared(): bool
     {
         return $this->shared;
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function getConcrete()
     {
         return $this->concrete;
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function setConcrete($concrete): DefinitionInterface
     {
         $this->concrete = $concrete;
         $this->resolved = null;
+
         return $this;
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function addArgument($arg): DefinitionInterface
     {
         $this->arguments[] = $arg;
+
         return $this;
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function addArguments(array $args): DefinitionInterface
     {
-        foreach ($args as $arg) {
+        foreach ($args as $arg)
+        {
             $this->addArgument($arg);
         }
 
         return $this;
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function addMethodCall(string $method, array $args = []): DefinitionInterface
     {
         $this->methods[] = [
@@ -136,58 +238,95 @@ class Definition implements ArgumentResolverInterface, DefinitionInterface
         return $this;
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function addMethodCalls(array $methods = []): DefinitionInterface
     {
-        foreach ($methods as $method => $args) {
+        foreach ($methods as $method => $args)
+        {
             $this->addMethodCall($method, $args);
         }
 
         return $this;
     }
 
-    public function resolve()
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
+    public function resolve(array $params = [])
     {
-        if (null !== $this->resolved && $this->isShared()) {
+        if (null !== $this->resolved && $this->isShared())
+        {
+            if ( ! empty($params))
+            {
+                throw new ContainerException(sprintf('You can not pass new arguments to an already instantiated shared class (%s)!', $this->alias));
+            }
+
             return $this->resolved;
         }
 
-        return $this->resolveNew();
+        return $this->resolveNew($params);
     }
 
-    public function resolveNew()
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
+    public function resolveNew(array $params = [])
     {
         $concrete = $this->concrete;
 
-        if (is_callable($concrete)) {
-            $concrete = $this->resolveCallable($concrete);
+        if (is_callable($concrete))
+        {
+            $concrete = $this->resolveCallable($concrete, $params);
         }
 
-        if ($concrete instanceof LiteralArgumentInterface) {
+        if ($concrete instanceof LiteralArgumentInterface)
+        {
             $this->resolved = $concrete->getValue();
             return $concrete->getValue();
         }
 
-        if ($concrete instanceof ArgumentInterface) {
+        if ($concrete instanceof ArgumentInterface)
+        {
             $concrete = $concrete->getValue();
         }
 
-        if (is_string($concrete) && class_exists($concrete)) {
-            $concrete = $this->resolveClass($concrete);
+        if (is_string($concrete) && class_exists($concrete))
+        {
+            $concrete = $this->resolveClass($concrete, $params);
         }
 
-        if (is_object($concrete)) {
-            $concrete = $this->invokeMethods($concrete);
+        if (is_object($concrete))
+        {
+            $concrete = $this->invokeMethods($concrete, $params);
         }
 
-        try {
+        try
+        {
             $container = $this->getContainer();
-        } catch (ContainerException $e) {
+        }
+        catch (ContainerException $e)
+        {
             $container = null;
         }
 
         // if we still have a string, try to pull it from the container
         // this allows for `alias -> alias -> ... -> concrete
-        if (is_string($concrete) && $container instanceof ContainerInterface && $container->has($concrete)) {
+        if (is_string($concrete) && $container instanceof ContainerInterface && $container->has($concrete))
+        {
             $concrete = $container->get($concrete);
         }
 
@@ -196,26 +335,47 @@ class Definition implements ArgumentResolverInterface, DefinitionInterface
     }
 
     /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
      * @param callable $concrete
      * @return mixed
+     *
+     * @since 2.0.0
      */
-    protected function resolveCallable(callable $concrete)
+    protected function resolveCallable(callable $concrete, array $params = null)
     {
-        $resolved = $this->resolveArguments($this->arguments);
+        $resolved = $this->resolveArguments($this->arguments, $params);
         return call_user_func_array($concrete, $resolved);
     }
 
-    protected function resolveClass(string $concrete): object
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
+    protected function resolveClass(string $concrete, array $params = null): object
     {
-        $resolved   = $this->resolveArguments($this->arguments);
+        $resolved   = $this->resolveArguments($this->arguments, $params);
         $reflection = new ReflectionClass($concrete);
         return $reflection->newInstanceArgs($resolved);
     }
 
-    protected function invokeMethods(object $instance): object
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
+    protected function invokeMethods(object $instance, array $params = null): object
     {
-        foreach ($this->methods as $method) {
-            $args = $this->resolveArguments($method['arguments']);
+        foreach ($this->methods as $method)
+        {
+            $args = $this->resolveArguments($method['arguments'], $params);
             $callable = [$instance, $method['method']];
             call_user_func_array($callable, $args);
         }

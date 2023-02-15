@@ -1,13 +1,26 @@
-<?php
+<?php declare(strict_types=1);
 
-declare(strict_types=1);
+/**
+ * The Fuel PHP Framework is a fast, simple and flexible development framework
+ *
+ * @package    fuel
+ * @version    2.0.0
+ * @author     FlexCoders Ltd, Fuel The PHP Framework Team
+ * @license    MIT License
+ * @copyright  2021 Phil Bennett <philipobenito@gmail.com>
+ * @copyright  2023 FlexCoders Ltd, The Fuel PHP Framework Team
+ * @link       https://fuelphp.org
+ */
 
-namespace League\Container\ServiceProvider;
+namespace Fuel\Container\ServiceProvider;
 
 use Generator;
-use League\Container\Exception\ContainerException;
-use League\Container\{ContainerAwareInterface, ContainerAwareTrait};
+use Fuel\Container\Exception\ContainerException;
+use Fuel\Container\{ContainerAwareInterface, ContainerAwareTrait};
 
+/**
+ * @since 2.0
+ */
 class ServiceProviderAggregate implements ServiceProviderAggregateInterface
 {
     use ContainerAwareTrait;
@@ -22,28 +35,48 @@ class ServiceProviderAggregate implements ServiceProviderAggregateInterface
      */
     protected $registered = [];
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function add(ServiceProviderInterface $provider): ServiceProviderAggregateInterface
     {
-        if (in_array($provider, $this->providers, true)) {
+        if (in_array($provider, $this->providers, true))
+        {
             return $this;
         }
 
-        if ($provider instanceof ContainerAwareInterface) {
+        if ($provider instanceof ContainerAwareInterface)
+        {
             $provider->setContainer($this->getContainer());
         }
 
-        if ($provider instanceof BootableServiceProviderInterface) {
+        if ($provider instanceof BootableServiceProviderInterface)
+        {
             $provider->boot();
         }
 
         $this->providers[] = $provider;
+
         return $this;
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function provides(string $service): bool
     {
-        foreach ($this->getIterator() as $provider) {
-            if ($provider->provides($service)) {
+        foreach ($this->getIterator() as $provider)
+        {
+            if ($provider->provides($service))
+            {
                 return true;
             }
         }
@@ -51,25 +84,43 @@ class ServiceProviderAggregate implements ServiceProviderAggregateInterface
         return false;
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function getIterator(): Generator
     {
         yield from $this->providers;
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function register(string $service): void
     {
-        if (false === $this->provides($service)) {
+        if (false === $this->provides($service))
+        {
             throw new ContainerException(
                 sprintf('(%s) is not provided by a service provider', $service)
             );
         }
 
-        foreach ($this->getIterator() as $provider) {
-            if (in_array($provider->getIdentifier(), $this->registered, true)) {
+        foreach ($this->getIterator() as $provider)
+        {
+            if (in_array($provider->getIdentifier(), $this->registered, true))
+            {
                 continue;
             }
 
-            if ($provider->provides($service)) {
+            if ($provider->provides($service))
+            {
                 $provider->register();
                 $this->registered[] = $provider->getIdentifier();
             }

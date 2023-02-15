@@ -1,17 +1,30 @@
-<?php
+<?php declare(strict_types=1);
 
-declare(strict_types=1);
+/**
+ * The Fuel PHP Framework is a fast, simple and flexible development framework
+ *
+ * @package    fuel
+ * @version    2.0.0
+ * @author     FlexCoders Ltd, Fuel The PHP Framework Team
+ * @license    MIT License
+ * @copyright  2021 Phil Bennett <philipobenito@gmail.com>
+ * @copyright  2023 FlexCoders Ltd, The Fuel PHP Framework Team
+ * @link       https://fuelphp.org
+ */
 
-namespace League\Container;
+namespace Fuel\Container;
 
-use League\Container\Definition\{DefinitionAggregate, DefinitionInterface, DefinitionAggregateInterface};
-use League\Container\Exception\{NotFoundException, ContainerException};
-use League\Container\Inflector\{InflectorAggregate, InflectorInterface, InflectorAggregateInterface};
-use League\Container\ServiceProvider\{ServiceProviderAggregate,
+use Fuel\Container\Definition\{DefinitionAggregate, DefinitionInterface, DefinitionAggregateInterface};
+use Fuel\Container\Exception\{NotFoundException, ContainerException};
+use Fuel\Container\Inflector\{InflectorAggregate, InflectorInterface, InflectorAggregateInterface};
+use Fuel\Container\ServiceProvider\{ServiceProviderAggregate,
     ServiceProviderAggregateInterface,
     ServiceProviderInterface};
 use Psr\Container\ContainerInterface;
 
+/**
+ * @since 2.0
+ */
 class Container implements DefinitionContainerInterface
 {
     /**
@@ -39,58 +52,101 @@ class Container implements DefinitionContainerInterface
      */
     protected $delegates = [];
 
+    /**
+     * -----------------------------------------------------------------------------
+     * Class constructor
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function __construct(
         DefinitionAggregateInterface $definitions = null,
         ServiceProviderAggregateInterface $providers = null,
-        InflectorAggregateInterface $inflectors = null
-    ) {
+        InflectorAggregateInterface $inflectors = null)
+    {
         $this->definitions = $definitions ?? new DefinitionAggregate();
         $this->providers   = $providers   ?? new ServiceProviderAggregate();
         $this->inflectors  = $inflectors  ?? new InflectorAggregate();
 
-        if ($this->definitions instanceof ContainerAwareInterface) {
+        if ($this->definitions instanceof ContainerAwareInterface)
+        {
             $this->definitions->setContainer($this);
         }
 
-        if ($this->providers instanceof ContainerAwareInterface) {
+        if ($this->providers instanceof ContainerAwareInterface)
+        {
             $this->providers->setContainer($this);
         }
 
-        if ($this->inflectors instanceof ContainerAwareInterface) {
+        if ($this->inflectors instanceof ContainerAwareInterface)
+        {
             $this->inflectors->setContainer($this);
         }
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function add(string $id, $concrete = null): DefinitionInterface
     {
         $concrete = $concrete ?? $id;
 
-        if (true === $this->defaultToShared) {
+        if (true === $this->defaultToShared)
+        {
             return $this->addShared($id, $concrete);
         }
 
         return $this->definitions->add($id, $concrete);
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function addShared(string $id, $concrete = null): DefinitionInterface
     {
         $concrete = $concrete ?? $id;
+
         return $this->definitions->addShared($id, $concrete);
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function defaultToShared(bool $shared = true): ContainerInterface
     {
         $this->defaultToShared = $shared;
+
         return $this;
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function extend(string $id): DefinitionInterface
     {
-        if ($this->providers->provides($id)) {
+        if ($this->providers->provides($id))
+        {
             $this->providers->register($id);
         }
 
-        if ($this->definitions->has($id)) {
+        if ($this->definitions->has($id))
+        {
             return $this->definitions->getDefinition($id);
         }
 
@@ -100,52 +156,96 @@ class Container implements DefinitionContainerInterface
         ));
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function addServiceProvider(ServiceProviderInterface $provider): DefinitionContainerInterface
     {
         $this->providers->add($provider);
+
         return $this;
     }
 
     /**
-     * @template RequestedType
+     * -----------------------------------------------------------------------------
      *
-     * @param class-string<RequestedType>|string $id
+     * -----------------------------------------------------------------------------
      *
-     * @return RequestedType|mixed
+     * @since 2.0.0
      */
-    public function get($id)
+    public function get(string $id)
     {
         return $this->resolve($id);
     }
 
     /**
-     * @template RequestedType
+     * -----------------------------------------------------------------------------
      *
-     * @param class-string<RequestedType>|string $id
+     * -----------------------------------------------------------------------------
      *
-     * @return RequestedType|mixed
+     * @since 2.0.0
      */
-    public function getNew($id)
+    public function getNew(string $id)
     {
         return $this->resolve($id, true);
     }
 
-    public function has($id): bool
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
+    public function getWith(string $id, array $params)
     {
-        if ($this->definitions->has($id)) {
+        return $this->resolve($id, false, $params);
+    }
+
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
+    public function getWithNew(string $id, array $params)
+    {
+        return $this->resolve($id, true, $params);
+    }
+
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
+    public function has(string $id): bool
+    {
+        if ($this->definitions->has($id))
+        {
             return true;
         }
 
-        if ($this->definitions->hasTag($id)) {
+        if ($this->definitions->hasTag($id))
+        {
             return true;
         }
 
-        if ($this->providers->provides($id)) {
+        if ($this->providers->provides($id))
+        {
             return true;
         }
 
-        foreach ($this->delegates as $delegate) {
-            if ($delegate->has($id)) {
+        foreach ($this->delegates as $delegate)
+        {
+            if ($delegate->has($id))
+            {
                 return true;
             }
         }
@@ -153,55 +253,83 @@ class Container implements DefinitionContainerInterface
         return false;
     }
 
-    public function inflector(string $type, callable $callback = null): InflectorInterface
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
+    public function inflector(string $type, callable|null $callback = null): InflectorInterface
     {
         return $this->inflectors->add($type, $callback);
     }
 
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function delegate(ContainerInterface $container): self
     {
         $this->delegates[] = $container;
 
-        if ($container instanceof ContainerAwareInterface) {
+        if ($container instanceof ContainerAwareInterface)
+        {
             $container->setContainer($this);
         }
 
         return $this;
     }
 
-    protected function resolve($id, bool $new = false)
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
+    protected function resolve(string $id, bool $new = false, array $params = [])
     {
-        if ($this->definitions->has($id)) {
-            $resolved = (true === $new) ? $this->definitions->resolveNew($id) : $this->definitions->resolve($id);
-            return $this->inflectors->inflect($resolved);
+        if ($this->definitions->has($id))
+        {
+            $resolved = (true === $new) ? $this->definitions->resolveNew($id, $params) : $this->definitions->resolve($id, $params);
+            return is_object($resolved) ? $this->inflectors->inflect($resolved) : $resolved;
         }
 
-        if ($this->definitions->hasTag($id)) {
+        if ($this->definitions->hasTag($id))
+        {
             $arrayOf = (true === $new)
                 ? $this->definitions->resolveTaggedNew($id)
                 : $this->definitions->resolveTagged($id);
 
             array_walk($arrayOf, function (&$resolved) {
-                $resolved = $this->inflectors->inflect($resolved);
+                is_object($resolved) and $resolved = $this->inflectors->inflect($resolved);
             });
 
             return $arrayOf;
         }
 
-        if ($this->providers->provides($id)) {
+        if ($this->providers->provides($id))
+        {
             $this->providers->register($id);
 
-            if (!$this->definitions->has($id) && !$this->definitions->hasTag($id)) {
+            if (!$this->definitions->has($id) && !$this->definitions->hasTag($id))
+            {
                 throw new ContainerException(sprintf('Service provider lied about providing (%s) service', $id));
             }
 
-            return $this->resolve($id, $new);
+            return $this->resolve($id, $new, $params);
         }
 
-        foreach ($this->delegates as $delegate) {
-            if ($delegate->has($id)) {
+        foreach ($this->delegates as $delegate)
+        {
+            if ($delegate->has($id))
+            {
                 $resolved = $delegate->get($id);
-                return $this->inflectors->inflect($resolved);
+                return is_object($resolved) ? $this->inflectors->inflect($resolved) : $resolved;
             }
         }
 

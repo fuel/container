@@ -20,6 +20,7 @@ use Fuel\Container\ReflectionContainer;
 use Psr\Container\ContainerInterface;
 use ReflectionFunctionAbstract;
 use ReflectionNamedType;
+use RuntimeException;
 
 /**
  * @since 2.0
@@ -86,6 +87,19 @@ trait ArgumentResolverTrait
                 try
                 {
                     $arg = $container->get($argValue);
+
+                    // a resolved tag returns an array
+                    if (is_array($arg))
+                    {
+                        if (count($arg) === 1)
+                        {
+                            $arg = $arg[0];
+                        }
+                        else
+                        {
+                            throw new RuntimeException(sprintf('You can not use Inflector::invokeMethod() using tags that can return multiple objects'));
+                        }
+                    }
 
                     if ($arg instanceof ArgumentInterface)
                     {

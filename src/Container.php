@@ -53,6 +53,11 @@ class Container implements DefinitionContainerInterface
     protected $delegates = [];
 
     /**
+     * @var string[]
+     */
+    protected $autoTags = [];
+
+    /**
      * -----------------------------------------------------------------------------
      * Class constructor
      * -----------------------------------------------------------------------------
@@ -97,10 +102,22 @@ class Container implements DefinitionContainerInterface
 
         if (true === $this->defaultToShared)
         {
-            return $this->addShared($id, $concrete);
+            $definition = $this->addShared($id, $concrete);
+        }
+        else
+        {
+            $definition = $this->definitions->add($id, $concrete);
         }
 
-        return $this->definitions->add($id, $concrete);
+        if (isset($this->autoTags[$id]))
+        {
+            foreach ($this->autoTags[$id] as $tag)
+            {
+                $definition->addTag($tag);
+            }
+        }
+
+        return $definition;
     }
 
     /**
@@ -114,7 +131,36 @@ class Container implements DefinitionContainerInterface
     {
         $concrete = $concrete ?? $id;
 
-        return $this->definitions->addShared($id, $concrete);
+        $definition = $this->definitions->addShared($id, $concrete);
+
+        if (isset($this->autoTags[$id]))
+        {
+            foreach ($this->autoTags[$id] as $tag)
+            {
+                $definition->addTag($tag);
+            }
+        }
+
+        return $definition;
+    }
+
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
+    public function autoTag(string $id, string $tag): void
+    {
+        if (isset($this->autoTags[$id]))
+        {
+            $this->autoTags[$id][] = $tag;
+        }
+        else
+        {
+            $this->autoTags[$id] = [$tag];
+        }
     }
 
     /**

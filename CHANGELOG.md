@@ -6,3 +6,5 @@
 
 ### Fork
 - This is a fork of https://github.com/thephpleague/container, version 4.2.0.
+
+We forked it because encapsulating is too complex and has too much of a performance impact to be implemented in a development framework, and we needed to add specific Fuel support.

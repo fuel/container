@@ -1,8 +1,0 @@
-build
-composer.lock
-vendor
-.sass-cache
-.phpunit.result.cache
-.phpcs-cache
-docs/.jekyll-cache
-docs/_site

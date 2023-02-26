@@ -21,7 +21,7 @@ use Fuel\Container\Argument\{
     LiteralArgumentInterface
 };
 use Fuel\Container\ContainerAwareTrait;
-use Fuel\Container\Exception\ContainerException;
+use Fuel\Container\Exception\{NotFoundException, ContainerException};
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 
@@ -264,11 +264,11 @@ class Definition implements ArgumentResolverInterface, DefinitionInterface
      */
     public function resolve(array $params = [])
     {
-        if (null !== $this->resolved && $this->isShared())
+        if (null !== $this->resolved and $this->isShared())
         {
             if ( ! empty($params))
             {
-                throw new ContainerException(sprintf('You can not pass new arguments to an already instantiated shared class (%s)!', $this->alias));
+                throw new ContainerException(sprintf('You can not pass new arguments to an already instantiated class (%s)!', $this->alias));
             }
 
             return $this->resolved;
@@ -359,8 +359,27 @@ class Definition implements ArgumentResolverInterface, DefinitionInterface
      */
     protected function resolveClass(string $concrete, array $params = null): object
     {
-        $resolved   = $this->resolveArguments($this->arguments, $params);
         $reflection = new ReflectionClass($concrete);
+
+        // check if the constructor is from a different class
+        if ($reflection->getConstructor() and $reflection->getConstructor()->class !== $concrete)
+        {
+            try
+            {
+                $parent = $this->container->extend($reflection->getConstructor()->class);
+            }
+            catch (NotFoundException $e)
+            {
+                throw new NotFoundException(sprintf('Class "%s" extends "%s" which defines its constructor, but that class is not being managed by the container or delegates', $concrete, $reflection->getConstructor()->class));
+            }
+
+            $resolved = $parent->resolveArguments($parent->arguments, $params);
+        }
+        else
+        {
+            $resolved = $this->resolveArguments($this->arguments, $params);
+        }
+
         return $reflection->newInstanceArgs($resolved);
     }
 

@@ -15,7 +15,7 @@ namespace Fuel\Container\Providers;
 
 use Fuel\Container\ServiceProvider\{AbstractServiceProvider, BootableServiceProviderInterface};
 use Fuel\Container\Argument\RuntimeValueArgument;
-use Fuel\Container\{Container, ContainerAwareInterface};
+use Fuel\Container\Container;
 
 /**
  * Fuel\Framework Service Provider
@@ -36,9 +36,6 @@ class FuelServiceProvider extends AbstractServiceProvider implements BootableSer
      */
     public function boot(): void
     {
-        $this->getContainer()
-            ->inflector(ContainerAwareInterface::class)
-                ->invokeMethod('setContainer', ['container.active']);
     }
 
     /**

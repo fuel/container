@@ -81,13 +81,16 @@ class DefinitionAggregate implements DefinitionAggregateInterface
      *
      * @since 2.0.0
      */
-    public function has(string $id): bool
+    public function has(string $id, bool $resolved = false): bool
     {
         foreach ($this->getIterator() as $definition)
         {
             if ($id === $definition->getAlias())
             {
-                return true;
+                if ( ! $resolved or $definition->isResolved())
+                {
+                    return true;
+                }
             }
         }
 
@@ -101,13 +104,16 @@ class DefinitionAggregate implements DefinitionAggregateInterface
      *
      * @since 2.0.0
      */
-    public function hasTag(string $tag): bool
+    public function hasTag(string $tag, bool $resolved = false): bool
     {
         foreach ($this->getIterator() as $definition)
         {
             if ($definition->hasTag($tag))
             {
-                return true;
+                if ( ! $resolved or $definition->isResolved())
+                {
+                    return true;
+                }
             }
         }
 

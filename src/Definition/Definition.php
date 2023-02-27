@@ -170,6 +170,18 @@ class Definition implements ArgumentResolverInterface, DefinitionInterface
      *
      * @since 2.0.0
      */
+    public function isResolved(): bool
+    {
+        return ($this->resolved !== null);
+    }
+
+    /**
+     * -----------------------------------------------------------------------------
+     *
+     * -----------------------------------------------------------------------------
+     *
+     * @since 2.0.0
+     */
     public function getConcrete()
     {
         return $this->concrete;

@@ -271,19 +271,19 @@ class Container implements DefinitionContainerInterface
      *
      * @since 2.0.0
      */
-    public function has(string $id): bool
+    public function has(string $id, bool $resolved = false): bool
     {
-        if ($this->definitions->has($id))
+        if ($this->definitions->has($id, $resolved))
         {
             return true;
         }
 
-        if ($this->definitions->hasTag($id))
+        if ($this->definitions->hasTag($id, $resolved))
         {
             return true;
         }
 
-        if ($this->providers->provides($id))
+        if ($resolved === false and $this->providers->provides($id))
         {
             return true;
         }

@@ -21,8 +21,8 @@ use Fuel\Container\ContainerAwareInterface;
  */
 interface ServiceProviderInterface extends ContainerAwareInterface
 {
-    public function getIdentifier(): string;
-    public function provides(string $id): bool;
-    public function register(): void;
-    public function setIdentifier(string $id): ServiceProviderInterface;
+	public function getIdentifier(): string;
+	public function provides(string $id): bool;
+	public function register(): void;
+	public function setIdentifier(string $id): ServiceProviderInterface;
 }

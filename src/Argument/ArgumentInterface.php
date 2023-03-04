@@ -19,8 +19,8 @@ namespace Fuel\Container\Argument;
  */
 interface ArgumentInterface
 {
-    /**
-     * @return mixed
-     */
-    public function getValue();
+	/**
+	 * @return mixed
+	 */
+	public function getValue(): mixed;
 }

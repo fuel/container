@@ -16,40 +16,42 @@ namespace Fuel\Container\ServiceProvider;
 
 use Fuel\Container\ContainerAwareTrait;
 
+use get_class;
+
 /**
  * @since 2.0
  */
 abstract class AbstractServiceProvider implements ServiceProviderInterface
 {
-    use ContainerAwareTrait;
+	use ContainerAwareTrait;
 
-    /**
-     * @var string
-     */
-    protected $identifier;
+	/**
+	 * @var string
+	 */
+	protected $identifier;
 
-    /**
-     * -----------------------------------------------------------------------------
-     *
-     * -----------------------------------------------------------------------------
-     *
-     * @since 2.0.0
-     */
-    public function getIdentifier(): string
-    {
-        return $this->identifier ?? get_class($this);
-    }
+	/**
+	 * -----------------------------------------------------------------------------
+	 *
+	 * -----------------------------------------------------------------------------
+	 *
+	 * @since 2.0.0
+	 */
+	public function getIdentifier(): string
+	{
+		return $this->identifier ?? get_class($this);
+	}
 
-    /**
-     * -----------------------------------------------------------------------------
-     *
-     * -----------------------------------------------------------------------------
-     *
-     * @since 2.0.0
-     */
-    public function setIdentifier(string $id): ServiceProviderInterface
-    {
-        $this->identifier = $id;
-        return $this;
-    }
+	/**
+	 * -----------------------------------------------------------------------------
+	 *
+	 * -----------------------------------------------------------------------------
+	 *
+	 * @since 2.0.0
+	 */
+	public function setIdentifier(string $id): ServiceProviderInterface
+	{
+		$this->identifier = $id;
+		return $this;
+	}
 }

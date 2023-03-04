@@ -18,112 +18,115 @@ use Generator;
 use Fuel\Container\Exception\ContainerException;
 use Fuel\Container\{ContainerAwareInterface, ContainerAwareTrait};
 
+use in_array;
+use sprintf;
+
 /**
  * @since 2.0
  */
 class ServiceProviderAggregate implements ServiceProviderAggregateInterface
 {
-    use ContainerAwareTrait;
+	use ContainerAwareTrait;
 
-    /**
-     * @var ServiceProviderInterface[]
-     */
-    protected $providers = [];
+	/**
+	 * @var ServiceProviderInterface[]
+	 */
+	protected $providers = [];
 
-    /**
-     * @var array
-     */
-    protected $registered = [];
+	/**
+	 * @var array
+	 */
+	protected $registered = [];
 
-    /**
-     * -----------------------------------------------------------------------------
-     *
-     * -----------------------------------------------------------------------------
-     *
-     * @since 2.0.0
-     */
-    public function add(ServiceProviderInterface $provider): ServiceProviderAggregateInterface
-    {
-        if (in_array($provider, $this->providers, true))
-        {
-            return $this;
-        }
+	/**
+	 * -----------------------------------------------------------------------------
+	 *
+	 * -----------------------------------------------------------------------------
+	 *
+	 * @since 2.0.0
+	 */
+	public function add(ServiceProviderInterface $provider): ServiceProviderAggregateInterface
+	{
+		if (in_array($provider, $this->providers, true))
+		{
+			return $this;
+		}
 
-        if ($provider instanceof ContainerAwareInterface)
-        {
-            $provider->setContainer($this->getContainer());
-        }
+		if ($provider instanceof ContainerAwareInterface)
+		{
+			$provider->setContainer($this->getContainer());
+		}
 
-        if ($provider instanceof BootableServiceProviderInterface)
-        {
-            $provider->boot();
-        }
+		if ($provider instanceof BootableServiceProviderInterface)
+		{
+			$provider->boot();
+		}
 
-        $this->providers[] = $provider;
+		$this->providers[] = $provider;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * -----------------------------------------------------------------------------
-     *
-     * -----------------------------------------------------------------------------
-     *
-     * @since 2.0.0
-     */
-    public function provides(string $service): bool
-    {
-        foreach ($this->getIterator() as $provider)
-        {
-            if ($provider->provides($service))
-            {
-                return true;
-            }
-        }
+	/**
+	 * -----------------------------------------------------------------------------
+	 *
+	 * -----------------------------------------------------------------------------
+	 *
+	 * @since 2.0.0
+	 */
+	public function provides(string $service): bool
+	{
+		foreach ($this->getIterator() as $provider)
+		{
+			if ($provider->provides($service))
+			{
+				return true;
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    /**
-     * -----------------------------------------------------------------------------
-     *
-     * -----------------------------------------------------------------------------
-     *
-     * @since 2.0.0
-     */
-    public function getIterator(): Generator
-    {
-        yield from $this->providers;
-    }
+	/**
+	 * -----------------------------------------------------------------------------
+	 *
+	 * -----------------------------------------------------------------------------
+	 *
+	 * @since 2.0.0
+	 */
+	public function getIterator(): Generator
+	{
+		yield from $this->providers;
+	}
 
-    /**
-     * -----------------------------------------------------------------------------
-     *
-     * -----------------------------------------------------------------------------
-     *
-     * @since 2.0.0
-     */
-    public function register(string $service): void
-    {
-        if (false === $this->provides($service))
-        {
-            throw new ContainerException(
-                sprintf('(%s) is not provided by a service provider', $service)
-            );
-        }
+	/**
+	 * -----------------------------------------------------------------------------
+	 *
+	 * -----------------------------------------------------------------------------
+	 *
+	 * @since 2.0.0
+	 */
+	public function register(string $service): void
+	{
+		if ($this->provides($service) === false)
+		{
+			throw new ContainerException(
+				sprintf('(%s) is not provided by a service provider', $service)
+			);
+		}
 
-        foreach ($this->getIterator() as $provider)
-        {
-            if (in_array($provider->getIdentifier(), $this->registered, true))
-            {
-                continue;
-            }
+		foreach ($this->getIterator() as $provider)
+		{
+			if (in_array($provider->getIdentifier(), $this->registered, true))
+			{
+				continue;
+			}
 
-            if ($provider->provides($service))
-            {
-                $provider->register();
-                $this->registered[] = $provider->getIdentifier();
-            }
-        }
-    }
+			if ($provider->provides($service))
+			{
+				$provider->register();
+				$this->registered[] = $provider->getIdentifier();
+			}
+		}
+	}
 }

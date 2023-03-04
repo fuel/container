@@ -18,8 +18,8 @@ use Fuel\Container\Argument\LiteralArgument;
 
 class ObjectArgument extends LiteralArgument
 {
-    public function __construct(object $value)
-    {
-        parent::__construct($value, LiteralArgument::TYPE_OBJECT);
-    }
+	public function __construct(object $value)
+	{
+		parent::__construct($value, LiteralArgument::TYPE_OBJECT);
+	}
 }

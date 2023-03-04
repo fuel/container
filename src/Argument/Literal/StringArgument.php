@@ -18,8 +18,8 @@ use Fuel\Container\Argument\LiteralArgument;
 
 class StringArgument extends LiteralArgument
 {
-    public function __construct(string $value)
-    {
-        parent::__construct($value, LiteralArgument::TYPE_STRING);
-    }
+	public function __construct(string $value)
+	{
+		parent::__construct($value, LiteralArgument::TYPE_STRING);
+	}
 }

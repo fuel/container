@@ -24,12 +24,12 @@ use Psr\Container\ContainerInterface;
  */
 interface DefinitionContainerInterface extends ContainerInterface
 {
-    public function add(string $id, $concrete = null): DefinitionInterface;
-    public function addServiceProvider(ServiceProviderInterface $provider): self;
-    public function addShared(string $id, $concrete = null): DefinitionInterface;
-    public function extend(string $id): DefinitionInterface;
-    public function getNew(string $id);
-    public function getWith(string $id, array $params);
-    public function getWithNew(string $id, array $params);
-    public function inflector(string $type, callable $callback = null): InflectorInterface;
+	public function add(string $id, mixed $concrete = null): DefinitionInterface;
+	public function addServiceProvider(ServiceProviderInterface $provider): self;
+	public function addShared(string $id, mixed $concrete = null): DefinitionInterface;
+	public function extend(string $id): DefinitionInterface;
+	public function getNew(string $id): mixed;
+	public function getWith(string $id, array $params): mixed;
+	public function getWithNew(string $id, array $params): mixed;
+	public function inflector(string $type, callable $callback = null): InflectorInterface;
 }

@@ -18,8 +18,8 @@ use Fuel\Container\Argument\LiteralArgument;
 
 class IntegerArgument extends LiteralArgument
 {
-    public function __construct(int $value)
-    {
-        parent::__construct($value, LiteralArgument::TYPE_INT);
-    }
+	public function __construct(int $value)
+	{
+		parent::__construct($value, LiteralArgument::TYPE_INT);
+	}
 }

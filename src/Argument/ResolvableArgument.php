@@ -19,29 +19,29 @@ namespace Fuel\Container\Argument;
  */
 class ResolvableArgument implements ResolvableArgumentInterface
 {
-    protected $value;
+	protected string $value;
 
-    /**
-     * -----------------------------------------------------------------------------
-     * Class constructor
-     * -----------------------------------------------------------------------------
-     *
-     * @since 2.0.0
-     */
-    public function __construct(string $value)
-    {
-        $this->value = $value;
-    }
+	/**
+	 * -----------------------------------------------------------------------------
+	 * Class constructor
+	 * -----------------------------------------------------------------------------
+	 *
+	 * @since 2.0.0
+	 */
+	public function __construct(string $value)
+	{
+		$this->value = $value;
+	}
 
-    /**
-     * -----------------------------------------------------------------------------
-     *
-     * -----------------------------------------------------------------------------
-     *
-     * @since 2.0.0
-     */
-    public function getValue(): string
-    {
-        return $this->value;
-    }
+	/**
+	 * -----------------------------------------------------------------------------
+	 *
+	 * -----------------------------------------------------------------------------
+	 *
+	 * @since 2.0.0
+	 */
+	public function getValue(): string
+	{
+		return $this->value;
+	}
 }

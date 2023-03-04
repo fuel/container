@@ -19,13 +19,13 @@ namespace Fuel\Container\Argument;
  */
 interface RuntimeValueInterface
 {
-    /**
-     * @return void
-     */
-    public function getName(): string;
+	/**
+	 * @return void
+	 */
+	public function getName(): string;
 
-    /**
-     * @return mixed
-     */
-    public function getDefault(): mixed;
+	/**
+	 * @return mixed
+	 */
+	public function getDefault(): mixed;
 }

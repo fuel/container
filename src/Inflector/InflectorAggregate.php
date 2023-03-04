@@ -22,60 +22,60 @@ use Fuel\Container\ContainerAwareTrait;
  */
 class InflectorAggregate implements InflectorAggregateInterface
 {
-    use ContainerAwareTrait;
+	use ContainerAwareTrait;
 
-    /**
-     * @var Inflector[]
-     */
-    protected $inflectors = [];
+	/**
+	 * @var Inflector[]
+	 */
+	protected $inflectors = [];
 
-    /**
-     * -----------------------------------------------------------------------------
-     *
-     * -----------------------------------------------------------------------------
-     *
-     * @since 2.0.0
-     */
-    public function add(string $type, callable $callback = null): Inflector
-    {
-        $inflector = new Inflector($type, $callback);
-        $this->inflectors[] = $inflector;
+	/**
+	 * -----------------------------------------------------------------------------
+	 *
+	 * -----------------------------------------------------------------------------
+	 *
+	 * @since 2.0.0
+	 */
+	public function add(string $type, callable $callback = null): Inflector
+	{
+		$inflector = new Inflector($type, $callback);
+		$this->inflectors[] = $inflector;
 
-        return $inflector;
-    }
+		return $inflector;
+	}
 
-    /**
-     * -----------------------------------------------------------------------------
-     *
-     * -----------------------------------------------------------------------------
-     *
-     * @since 2.0.0
-     */
-    public function inflect($object)
-    {
-        foreach ($this->getIterator() as $inflector)
-        {
-            $type = $inflector->getType();
+	/**
+	 * -----------------------------------------------------------------------------
+	 *
+	 * -----------------------------------------------------------------------------
+	 *
+	 * @since 2.0.0
+	 */
+	public function inflect($object): object
+	{
+		foreach ($this->getIterator() as $inflector)
+		{
+			$type = $inflector->getType();
 
-            if ($object instanceof $type)
-            {
-                $inflector->setContainer($this->getContainer());
-                $inflector->inflect($object);
-            }
-        }
+			if ($object instanceof $type)
+			{
+				$inflector->setContainer($this->getContainer());
+				$inflector->inflect($object);
+			}
+		}
 
-        return $object;
-    }
+		return $object;
+	}
 
-    /**
-     * -----------------------------------------------------------------------------
-     *
-     * -----------------------------------------------------------------------------
-     *
-     * @since 2.0.0
-     */
-    public function getIterator(): Generator
-    {
-        yield from $this->inflectors;
-    }
+	/**
+	 * -----------------------------------------------------------------------------
+	 *
+	 * -----------------------------------------------------------------------------
+	 *
+	 * @since 2.0.0
+	 */
+	public function getIterator(): Generator
+	{
+		yield from $this->inflectors;
+	}
 }

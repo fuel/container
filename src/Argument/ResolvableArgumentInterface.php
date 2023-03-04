@@ -19,5 +19,5 @@ namespace Fuel\Container\Argument;
  */
 interface ResolvableArgumentInterface extends ArgumentInterface
 {
-    public function getValue(): string;
+	public function getValue(): string;
 }

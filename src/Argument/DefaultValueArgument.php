@@ -19,32 +19,32 @@ namespace Fuel\Container\Argument;
  */
 class DefaultValueArgument extends ResolvableArgument implements DefaultValueInterface
 {
-    /**
-     */
-    protected $defaultValue;
+	/**
+	 */
+	protected mixed $defaultValue;
 
-    /**
-     * -----------------------------------------------------------------------------
-     * Class constructor
-     * -----------------------------------------------------------------------------
-     *
-     * @since 2.0.0
-     */
-    public function __construct(string $value, $defaultValue = null)
-    {
-        $this->defaultValue = $defaultValue;
-        parent::__construct($value);
-    }
+	/**
+	 * -----------------------------------------------------------------------------
+	 * Class constructor
+	 * -----------------------------------------------------------------------------
+	 *
+	 * @since 2.0.0
+	 */
+	public function __construct(string $value, mixed $defaultValue = null)
+	{
+		$this->defaultValue = $defaultValue;
+		parent::__construct($value);
+	}
 
-    /**
-     * -----------------------------------------------------------------------------
-     *
-     * -----------------------------------------------------------------------------
-     *
-     * @since 2.0.0
-     */
-    public function getDefaultValue(): mixed
-    {
-        return $this->defaultValue;
-    }
+	/**
+	 * -----------------------------------------------------------------------------
+	 *
+	 * -----------------------------------------------------------------------------
+	 *
+	 * @since 2.0.0
+	 */
+	public function getDefaultValue(): mixed
+	{
+		return $this->defaultValue;
+	}
 }

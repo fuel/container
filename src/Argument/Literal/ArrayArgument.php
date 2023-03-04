@@ -18,8 +18,8 @@ use Fuel\Container\Argument\LiteralArgument;
 
 class ArrayArgument extends LiteralArgument
 {
-    public function __construct(array $value)
-    {
-        parent::__construct($value, LiteralArgument::TYPE_ARRAY);
-    }
+	public function __construct(array $value)
+	{
+		parent::__construct($value, LiteralArgument::TYPE_ARRAY);
+	}
 }

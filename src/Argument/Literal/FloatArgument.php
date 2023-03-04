@@ -18,8 +18,8 @@ use Fuel\Container\Argument\LiteralArgument;
 
 class FloatArgument extends LiteralArgument
 {
-    public function __construct(float $value)
-    {
-        parent::__construct($value, LiteralArgument::TYPE_FLOAT);
-    }
+	public function __construct(float $value)
+	{
+		parent::__construct($value, LiteralArgument::TYPE_FLOAT);
+	}
 }

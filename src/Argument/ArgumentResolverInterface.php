@@ -22,6 +22,6 @@ use ReflectionFunctionAbstract;
  */
 interface ArgumentResolverInterface extends ContainerAwareInterface
 {
-    public function resolveArguments(array $arguments, array $params = null): array;
-    public function reflectArguments(ReflectionFunctionAbstract $method, array $args = []): array;
+	public function resolveArguments(array $arguments, array $params = null): array;
+	public function reflectArguments(ReflectionFunctionAbstract $method, array $args = []): array;
 }

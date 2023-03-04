@@ -19,8 +19,8 @@ namespace Fuel\Container\Argument;
  */
 interface DefaultValueInterface extends ArgumentInterface
 {
-    /**
-     * @return mixed
-     */
-    public function getDefaultValue();
+	/**
+	 * @return mixed
+	 */
+	public function getDefaultValue(): mixed;
 }

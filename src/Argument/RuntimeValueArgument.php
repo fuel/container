@@ -15,58 +15,71 @@
 namespace Fuel\Container\Argument;
 
 use Fuel\Container\Exception\NotFoundException;
+
+use func_num_args;
+use array_key_exists;
+
 /**
  * @since 2.0
  */
 class RuntimeValueArgument implements RuntimeValueInterface
 {
-    protected $name;
+	/*
+	 * @var string  Name of the argument
+	 */
+	protected string $name;
 
-    protected $values = [];
+	/*
+	 * @var array  Used to store the default value
+	 *
+	 * Note that an array is used because it is easy to differentiate between
+	 * null and not-set.
+	 */
+	protected array $values = [];
 
-    /**
-     * -----------------------------------------------------------------------------
-     * Class constructor
-     * -----------------------------------------------------------------------------
-     *
-     * @since 2.0.0
-     */
-    public function __construct(string $name, mixed $default = null)
-    {
-        $this->name = $name;
+	/**
+	 * -----------------------------------------------------------------------------
+	 * Class constructor
+	 * -----------------------------------------------------------------------------
+	 *
+	 * @since 2.0.0
+	 */
+	public function __construct(string $name, mixed $default = null)
+	{
+		$this->name = $name;
 
-        if (func_num_args() > 1)
-        {
-            $this->values['default'] = $default;
-        }
-    }
+		if (func_num_args() > 1)
+		{
+			$this->values['default'] = $default;
+		}
+	}
 
-    /**
-     * -----------------------------------------------------------------------------
-     *
-     * -----------------------------------------------------------------------------
-     *
-     * @since 2.0.0
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
+	/**
+	 * -----------------------------------------------------------------------------
+	 *
+	 * -----------------------------------------------------------------------------
+	 *
+	 * @since 2.0.0
+	 */
+	public function getName(): string
+	{
+		return $this->name;
+	}
 
-    /**
-     * -----------------------------------------------------------------------------
-     *
-     * -----------------------------------------------------------------------------
-     *
-     * @since 2.0.0
-     */
-    public function getDefault(): mixed
-    {
-        if (array_key_exists('default', $this->values))
-        {
-            return $this->values['default'];
-        }
+	/**
+	 * -----------------------------------------------------------------------------
+	 *
+	 * -----------------------------------------------------------------------------
+	 *
+	 * @since 2.0.0
+	 */
+	public function getDefault(): mixed
+	{
+		if (array_key_exists('default', $this->values))
+		{
+			return $this->values['default'];
+		}
 
-        throw new NotFoundException(sprintf('No runtime value exists for "%s".', $this->name));
-    }
+		throw new NotFoundException(sprintf('No default value exists for "%s".', $this->name));
+	}
 }

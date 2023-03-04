@@ -19,6 +19,6 @@ namespace Fuel\Container;
  */
 interface ContainerAwareInterface
 {
-    public function getContainer(): DefinitionContainerInterface;
-    public function setContainer(DefinitionContainerInterface $container): ContainerAwareInterface;
+	public function getContainer(): DefinitionContainerInterface;
+	public function setContainer(DefinitionContainerInterface $container): ContainerAwareInterface;
 }

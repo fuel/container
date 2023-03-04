@@ -18,8 +18,8 @@ use Fuel\Container\Argument\LiteralArgument;
 
 class BooleanArgument extends LiteralArgument
 {
-    public function __construct(bool $value)
-    {
-        parent::__construct($value, LiteralArgument::TYPE_BOOL);
-    }
+	public function __construct(bool $value)
+	{
+		parent::__construct($value, LiteralArgument::TYPE_BOOL);
+	}
 }

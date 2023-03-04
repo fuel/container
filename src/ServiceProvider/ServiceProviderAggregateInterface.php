@@ -22,7 +22,7 @@ use Fuel\Container\ContainerAwareInterface;
  */
 interface ServiceProviderAggregateInterface extends ContainerAwareInterface, IteratorAggregate
 {
-    public function add(ServiceProviderInterface $provider): ServiceProviderAggregateInterface;
-    public function provides(string $id): bool;
-    public function register(string $service): void;
+	public function add(ServiceProviderInterface $provider): ServiceProviderAggregateInterface;
+	public function provides(string $id): bool;
+	public function register(string $service): void;
 }

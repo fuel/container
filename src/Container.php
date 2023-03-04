@@ -22,9 +22,9 @@ use Fuel\Container\ServiceProvider\{ServiceProviderAggregate,
 	ServiceProviderInterface};
 use Psr\Container\ContainerInterface;
 
-use sprintf;
-use is_object;
-use array_walk;
+use function array_walk;
+use function is_object;
+use function sprintf;
 
 /**
  * @since 2.0

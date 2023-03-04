@@ -16,8 +16,8 @@ namespace Fuel\Container\Argument;
 
 use Fuel\Container\Exception\NotFoundException;
 
-use func_num_args;
-use array_key_exists;
+use function func_num_args;
+use function array_key_exists;
 
 /**
  * @since 2.0

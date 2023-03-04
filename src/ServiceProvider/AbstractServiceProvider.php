@@ -16,7 +16,7 @@ namespace Fuel\Container\ServiceProvider;
 
 use Fuel\Container\ContainerAwareTrait;
 
-use get_class;
+use function get_class;
 
 /**
  * @since 2.0

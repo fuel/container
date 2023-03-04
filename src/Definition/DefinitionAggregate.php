@@ -18,8 +18,8 @@ use Generator;
 use Fuel\Container\ContainerAwareTrait;
 use Fuel\Container\Exception\NotFoundException;
 
-use array_filter;
-use sprintf;
+use function array_filter;
+use function sprintf;
 
 /**
  * @since 2.0

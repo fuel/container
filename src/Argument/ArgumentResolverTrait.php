@@ -22,11 +22,11 @@ use ReflectionFunctionAbstract;
 use ReflectionNamedType;
 use RuntimeException;
 
-use array_key_exists;
-use is_string;
-use is_array;
-use count;
-use ltrim;
+use function array_key_exists;
+use function is_string;
+use function is_array;
+use function count;
+use function ltrim;
 
 /**
  * @since 2.0

@@ -25,11 +25,11 @@ use Fuel\Container\Exception\{NotFoundException, ContainerException};
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 
-use is_callable;
-use is_string;
-use is_object;
-use class_exists;
-use call_user_func_array;
+use function call_user_func_array;
+use function class_exists;
+use function is_callable;
+use function is_object;
+use function is_string;
 /**
  * @since 2.0
  */
@@ -41,37 +41,37 @@ class Definition implements ArgumentResolverInterface, DefinitionInterface
 	/**
 	 * @var string
 	 */
-	protected $alias;
+	protected string $alias;
 
 	/**
 	 * @var mixed
 	 */
-	protected $concrete;
+	protected mixed $concrete;
 
 	/**
 	 * @var boolean
 	 */
-	protected $shared = false;
+	protected bool $shared = false;
 
 	/**
 	 * @var array
 	 */
-	protected $tags = [];
+	protected array $tags = [];
 
 	/**
 	 * @var array
 	 */
-	protected $arguments = [];
+	protected array $arguments = [];
 
 	/**
 	 * @var array
 	 */
-	protected $methods = [];
+	protected array $methods = [];
 
 	/**
 	 * @var mixed
 	 */
-	protected $resolved;
+	protected mixed $resolved;
 
 	/**
 	 * -----------------------------------------------------------------------------
@@ -83,7 +83,7 @@ class Definition implements ArgumentResolverInterface, DefinitionInterface
 	 *
 	 * @since 2.0.0
 	 */
-	public function __construct(string $id, $concrete = null)
+	public function __construct(string $id, mixed $concrete = null)
 	{
 		$concrete = $concrete ?? $id;
 		$this->alias    = $id;
@@ -199,7 +199,7 @@ class Definition implements ArgumentResolverInterface, DefinitionInterface
 	 *
 	 * @since 2.0.0
 	 */
-	public function setConcrete($concrete): DefinitionInterface
+	public function setConcrete(mixed $concrete): DefinitionInterface
 	{
 		$this->concrete = $concrete;
 		$this->resolved = null;
@@ -214,7 +214,7 @@ class Definition implements ArgumentResolverInterface, DefinitionInterface
 	 *
 	 * @since 2.0.0
 	 */
-	public function addArgument($arg): DefinitionInterface
+	public function addArgument(mixed $arg): DefinitionInterface
 	{
 		$this->arguments[] = $arg;
 

@@ -16,6 +16,10 @@ namespace Fuel\Container\Argument;
 
 use InvalidArgumentException;
 
+use function gettype;
+use function is_callable;
+use function is_object;
+
 /**
  * @since 2.0
  */

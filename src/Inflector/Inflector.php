@@ -18,10 +18,10 @@ use Fuel\Container\Argument\ArgumentResolverInterface;
 use Fuel\Container\Argument\ArgumentResolverTrait;
 use Fuel\Container\ContainerAwareTrait;
 
-use array_combine;
-use array_keys;
-use array_values;
-use call_user_func;
+use function array_combine;
+use function array_keys;
+use function array_values;
+use function call_user_func;
 
 /**
  * @since 2.0

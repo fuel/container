@@ -17,7 +17,7 @@ use Fuel\Container\ServiceProvider\{AbstractServiceProvider, BootableServiceProv
 use Fuel\Container\Argument\RuntimeValueArgument;
 use Fuel\Container\Container;
 
-use in_array;
+use function in_array;
 
 /**
  * Fuel\Framework Service Provider

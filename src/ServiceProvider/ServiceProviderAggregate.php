@@ -18,8 +18,8 @@ use Generator;
 use Fuel\Container\Exception\ContainerException;
 use Fuel\Container\{ContainerAwareInterface, ContainerAwareTrait};
 
-use in_array;
-use sprintf;
+use function in_array;
+use function sprintf;
 
 /**
  * @since 2.0

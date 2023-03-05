@@ -71,7 +71,7 @@ class Definition implements ArgumentResolverInterface, DefinitionInterface
 	/**
 	 * @var mixed
 	 */
-	protected mixed $resolved;
+	protected mixed $resolved = null;
 
 	/**
 	 * -----------------------------------------------------------------------------
